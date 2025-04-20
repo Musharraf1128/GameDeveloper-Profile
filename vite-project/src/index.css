@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --primary-black: #000000;
+  --primary-green: #00ff00;
+  --dark-green: #006600;
+  --light-green: #99ff99;
+  --terminal-font: 'VT323', 'Courier New', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--terminal-font);
+  background-color: var(--primary-black);
+  color: var(--primary-green);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--light-green);
+  text-shadow: var(--glow-effect);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+/* Apply glow to headings */
+h1, h2, h3 {
+  text-shadow: 0 0 5px var(--primary-green);
+}
