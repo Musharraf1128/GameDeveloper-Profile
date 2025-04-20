@@ -7,7 +7,7 @@ import { SkillBar } from '../components/SkillBar';
 
 export const Home = ({ games }) => {
   return (
-    <>
+    <>  
       <section className="profile-section" id="home">
         <div className="profile-info">
           <h2 className="glow-text typewriter">Games by Musharraf</h2>

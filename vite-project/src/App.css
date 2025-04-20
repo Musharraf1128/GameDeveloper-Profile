@@ -1,13 +1,15 @@
 :root {
     --primary-black: #000000;
-    --primary-green:  #00cc66;
+    --primary-green: #00cc66;
     --dark-green: #006600;
     --light-green: #66ffb2;
     --terminal-font: 'Courier New', monospace;
     --glow-effect: 0 0 10px var(--primary-green), 0 0 20px var(--primary-green);
 }
 
+/* for the cursor bug */
 * {
+    cursor: none;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -28,7 +30,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ThreeJS container styling */
 .three-container {
     position: fixed;
     top: 0;
@@ -37,10 +38,8 @@ body {
     height: 100%;
     z-index: 1;
     opacity: 0.3;
-    /* Adjust for better text visibility */
 }
 
-/* Content container */
 .content {
     position: relative;
     z-index: 2;
@@ -55,7 +54,8 @@ body {
     text-shadow: var(--glow-effect);
 }
 
-/* Header styling */
+/* Header Component styling */
+
 header {
     display: flex;
     justify-content: space-between;
@@ -291,10 +291,7 @@ textarea {
     }
 }
 
-
-/* Additional styling for About and Contact sections */
-
-/* About section */
+/* About Component */
 .about-section {
     padding: 60px 0;
 }
@@ -381,7 +378,7 @@ textarea {
     }
 }
 
-/* Contact section */
+/* Contact Component */
 .contact-section {
     padding: 60px 0;
 }
@@ -431,7 +428,7 @@ textarea {
     opacity: 1;
 }
 
-/* Adding a blinking cursor effect to terminal inputs */
+/* Blinking cursor effect for terminal inputs */
 .terminal-input:focus::after {
     content: '|';
     position: absolute;
@@ -514,3 +511,48 @@ textarea {
     margin-right: 10px;
 }
 
+/* for RetroCursor component */
+
+.retro-cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary-green);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    box-shadow: 0 0 10px var(--primary-green);
+    transform: translate(-50%, -50%);
+}
+
+.retro-cursor::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--primary-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+    animation: cursor-pulse 1.5s infinite;
+}
+
+@keyframes cursor-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+}

@@ -1,4 +1,4 @@
-// src/components/ThreeBackground.jsx
+// src/components/ThreeBackground.jsx (enhanced)
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 
@@ -21,6 +21,7 @@ export const ThreeBackground = () => {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mountRef.current.appendChild(renderer.domElement);
     
     // Handle resize
@@ -34,118 +35,166 @@ export const ThreeBackground = () => {
     
     window.addEventListener('resize', handleResize);
     
-    // Create retro grid
-    const gridHelper = new THREE.GridHelper(20, 20, 0x00ff00, 0x00ff00);
-    gridHelper.position.y = -3;
-    scene.add(gridHelper);
+    // Create multiple stacked grids for depth effect
+    const createGrid = (y, size, divisions, color) => {
+      const gridHelper = new THREE.GridHelper(size, divisions, color, color);
+      gridHelper.position.y = y;
+      scene.add(gridHelper);
+      return gridHelper;
+    };
+    
+    const mainGrid = createGrid(-2, 40, 40, 0x00ff00);
+    const secondaryGrid = createGrid(-4, 100, 100, 0x006600);
     
     // Add particles effect (green dots)
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 2000;
+    const particlesCount = 3000;
     
     const posArray = new Float32Array(particlesCount * 3);
     
     for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 30;
+      posArray[i] = (Math.random() - 0.5) * 50;
     }
     
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     
     const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.02,
+      size: 0.03,
       color: 0x00ff00,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending
     });
     
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
     
-    // Add a few glowing lines
-    // Create a matrix of lines for a more dramatic effect
-    for (let i = 0; i < 10; i++) {
-      const lineGeometry = new THREE.BufferGeometry();
-      const linePoints = [];
+    // Add floating text elements
+    const createTextMesh = (text, position) => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = 256;
+      canvas.height = 128;
       
-      // Create a random wavy line
-      for (let j = 0; j < 100; j++) {
-        const x = (j / 10) - 5;
-        const y = Math.sin(j * 0.2 + i) * 0.5;
-        const z = Math.cos(j * 0.1 + i) * 0.5 - 5;
-        linePoints.push(new THREE.Vector3(x, y, z));
-      }
+      // Draw text on canvas
+      context.fillStyle = 'black';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.font = '24px monospace';
+      context.fillStyle = '#00ff00';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText(text, canvas.width / 2, canvas.height / 2);
       
-      lineGeometry.setFromPoints(linePoints);
+      // Create texture from canvas
+      const texture = new THREE.CanvasTexture(canvas);
       
-      const lineMaterial = new THREE.LineBasicMaterial({
+      // Create a plane with the texture
+      const geometry = new THREE.PlaneGeometry(2, 1);
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0.7,
+        side: THREE.DoubleSide
+      });
+      
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(position.x, position.y, position.z);
+      scene.add(mesh);
+      
+      return mesh;
+    };
+    
+    // Create some floating text elements
+    const codeText1 = createTextMesh('< GAMES />', { x: -8, y: 3, z: -10 });
+    const codeText2 = createTextMesh('{ DEVELOPER }', { x: 7, y: 5, z: -15 });
+    const codeText3 = createTextMesh('// RETRO STYLE', { x: -5, y: -3, z: -8 });
+    
+    // Add wire cubes with glowing edges
+    const createWireCube = (size, position) => {
+      const geometry = new THREE.BoxGeometry(size, size, size);
+      const edges = new THREE.EdgesGeometry(geometry);
+      const material = new THREE.LineBasicMaterial({ 
         color: 0x00ff00,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.8
       });
       
-      const line = new THREE.Line(lineGeometry, lineMaterial);
-      scene.add(line);
-    }
-    
-    // Add random floating cubes for a more retro/digital feel
-    for (let i = 0; i < 20; i++) {
-      const cubeSize = Math.random() * 0.3 + 0.1;
-      const cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-      const cubeMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
-        wireframe: true
-      });
-      
-      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      
-      // Position cubes randomly
-      cube.position.x = (Math.random() - 0.5) * 20;
-      cube.position.y = (Math.random() - 0.5) * 20;
-      cube.position.z = (Math.random() - 0.5) * 20 - 5;
-      
-      // Store original position for animation
-      cube.userData.originalPos = {
-        x: cube.position.x,
-        y: cube.position.y,
-        z: cube.position.z
-      };
-      
-      // Random rotation speed
-      cube.userData.rotationSpeed = {
-        x: Math.random() * 0.01,
-        y: Math.random() * 0.01,
-        z: Math.random() * 0.01
-      };
-      
+      const cube = new THREE.LineSegments(edges, material);
+      cube.position.set(position.x, position.y, position.z);
       scene.add(cube);
-    }
+      
+      return cube;
+    };
+    
+    const cubes = [
+      createWireCube(2, { x: -5, y: 2, z: -10 }),
+      createWireCube(3, { x: 6, y: -1, z: -15 }),
+      createWireCube(4, { x: 0, y: 4, z: -20 }),
+      createWireCube(1, { x: -8, y: -3, z: -5 })
+    ];
+    
+    // Add a pulsing sphere
+    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.3
+    });
+    
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    sphere.position.set(0, 0, -10);
+    scene.add(sphere);
     
     // Animation
     const clock = new THREE.Clock();
+    let mouseX = 0;
+    let mouseY = 0;
+    
+    // Track mouse movement for parallax effect
+    const handleMouseMove = (event) => {
+      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
     
     const animate = () => {
       const elapsedTime = clock.getElapsedTime();
       requestAnimationFrame(animate);
       
+      // Subtle camera movement based on mouse position (parallax effect)
+      camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+      camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+      
       // Rotate particles
       particlesMesh.rotation.x = elapsedTime * 0.05;
       particlesMesh.rotation.y = elapsedTime * 0.03;
       
-      // Animate grid
-      gridHelper.position.z = (elapsedTime * 0.5) % 2;
+      // Animate grid movement
+      mainGrid.position.z = (elapsedTime * 0.5) % 2;
+      secondaryGrid.position.z = (elapsedTime * 0.2) % 4;
       
-      // Animate all cubes
-      scene.children.forEach(child => {
-        if (child instanceof THREE.Mesh && child.geometry instanceof THREE.BoxGeometry) {
-          // Rotate cube
-          child.rotation.x += child.userData.rotationSpeed.x;
-          child.rotation.y += child.userData.rotationSpeed.y;
-          child.rotation.z += child.userData.rotationSpeed.z;
-          
-          // Add some floating movement
-          const origPos = child.userData.originalPos;
-          child.position.y = origPos.y + Math.sin(elapsedTime + origPos.x) * 0.5;
-          child.position.x = origPos.x + Math.cos(elapsedTime + origPos.y) * 0.3;
-        }
+      // Animate text elements
+      codeText1.rotation.y = Math.sin(elapsedTime * 0.2) * 0.2;
+      codeText2.rotation.x = Math.cos(elapsedTime * 0.3) * 0.1;
+      codeText3.position.y = -3 + Math.sin(elapsedTime * 0.5) * 0.5;
+      
+      // Animate cubes
+      cubes.forEach((cube, index) => {
+        cube.rotation.x = elapsedTime * 0.2;
+        cube.rotation.y = elapsedTime * 0.3;
+        cube.rotation.z = elapsedTime * 0.1;
+        cube.position.y += Math.sin(elapsedTime + index) * 0.005;
       });
+      
+      // Animate pulsing sphere
+      const scale = 1 + Math.sin(elapsedTime * 2) * 0.2;
+      sphere.scale.set(scale, scale, scale);
+      sphere.rotation.y = elapsedTime * 0.5;
+      sphere.rotation.z = elapsedTime * 0.3;
+      sphere.material.opacity = 0.3 + Math.sin(elapsedTime * 2) * 0.2;
       
       // Render scene
       renderer.render(scene, camera);
@@ -156,25 +205,23 @@ export const ThreeBackground = () => {
     // Clean up
     return () => {
       window.removeEventListener('resize', handleResize);
-    
-      // Dispose geometries and materials
-      scene.children.forEach(child => {
-        if (child.geometry) {
-          child.geometry.dispose();
-        }
-        if (child.material) {
-          if (Array.isArray(child.material)) {
-            child.material.forEach(m => m.dispose());
+      window.removeEventListener('mousemove', handleMouseMove);
+      
+      // Dispose of all resources
+      scene.traverse(object => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            object.material.forEach(material => material.dispose());
           } else {
-            child.material.dispose();
+            object.material.dispose();
           }
         }
+        if (object.texture) object.texture.dispose();
       });
-    
+      
       renderer.dispose();
-    
-      // Safely remove the renderer DOM element
-      if (mountRef.current && renderer.domElement?.parentNode === mountRef.current) {
+      if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
     };

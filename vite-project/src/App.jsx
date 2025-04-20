@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { ThreeBackground } from './components/ThreeBackground';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { RetroCursor } from './components/RetroCursor';
 import './App.css';
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
     <Router>
       <div className="app">
         <ThreeBackground />
+        <RetroCursor />
         <div className="content">
           <Header />
           
