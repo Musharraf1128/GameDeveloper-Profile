@@ -45,7 +45,6 @@ Feel free to reach out for collaborations, suggestions, or just to say hi!
 
 - **React**: Frontend library for building interactive UIs.
 - **Vite**: Build tool for faster development and optimization.
-- **Three.js**: JavaScript library for 3D graphics, used for the interactive background.
 - **CSS**: Custom styling for the retro design and layout.
 - **Python**: Used for one of the games currently in development.
 
