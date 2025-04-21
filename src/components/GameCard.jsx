@@ -15,9 +15,11 @@ export const GameCard = ({ game }) => {
             <span key={index} className="tech-tag">{tech}</span>
           ))}
         </div>
-        <a href={game.url} className="btn play-btn">
+        {/* <a href={game.url} className="btn play-btn">
           Play Game
-        </a>
+        </a> */}
+        <button className="btn play-btn">Play</button>
+
       </div>
     </div>
   );

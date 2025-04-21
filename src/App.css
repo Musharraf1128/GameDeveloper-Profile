@@ -8,7 +8,7 @@
 }
 
 /* for the cursor bug */
-* {
+*, div {
     cursor: none;
     margin: 0;
     padding: 0;
