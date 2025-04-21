@@ -1,10 +1,10 @@
 # Musharraf's Game Developer Portfolio
 
-Welcome to my retro-styled game development portfolio! Here, you can explore my web-based games and projects. I'm Musharraf, a passionate game developer, experimenting with web development and game creation. Though not a game designer yet, I love creating and breaking things in style!
+Welcome to my retro-styled game development portfolio! Here, you can explore my web-based games and projects. I'm Musharraf,  just experimenting with web development and game creation. Though not a game designer, I love creating and breaking things in style!
 
 ## Games
 
-I have three games that I’ve developed:
+I have two games that I’ve developed: 
 
 1. **Tenzies**  
    A simple dice-matching game.  
@@ -14,9 +14,9 @@ I have three games that I’ve developed:
    A word-guessing game with a twist! (Not your typical hangman).  
    Technologies: React
 
-3. **Tic Tac Toe**  
+- **Tic Tac Toe**  
    Under development.  
-   Technologies: Python
+   Technologies: TBD
 
 ## Features
 

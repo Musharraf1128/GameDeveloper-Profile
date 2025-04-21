@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Home } from './pages/Home';
-import { ThreeBackground } from './components/ThreeBackground';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { RetroCursor } from './components/RetroCursor';
+import Tenzies from './components/games/Tenzies'
 import './App.css';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
       title: 'Tenzies', 
       description: 'A quick dice-matching game.',
       icon: '/src/images/tenzies-icon.png',
-      url: '/games/tenzies',
+      url: '/games/1',
       technologies: ['React']
     },
     { 
@@ -38,16 +38,13 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        <ThreeBackground />
         <RetroCursor />
         <div className="content">
           <Header />
           
           <Routes>
             <Route path="/" element={<Home games={games} />} />
-            {/* add route here
-            
-            */}
+            <Route path="/games/1" element={<Tenzies />} />
           </Routes>
           
           <Footer />

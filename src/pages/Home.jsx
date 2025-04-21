@@ -30,10 +30,9 @@ export const Home = ({ games }) => {
         <h2 className="glow-text"><GlitchText text="My Games" interval={3000} /></h2>
         <div className="games-container">
           {games.map(game => (
-            // <Link to={`/games/${game.id}`} key={game.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-            //   <GameCard game={game} />
-            // </Link>
-            <GameCard game={game} key={game.id}/>
+            <Link to={`/games/${game.id}`} key={game.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <GameCard game={game} />
+            </Link>
           ))}
         </div>
       </section>
