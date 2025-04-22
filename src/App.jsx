@@ -13,7 +13,7 @@ const App = () => {
       id: 1, 
       title: 'Tenzies', 
       description: 'A quick dice-matching game.',
-      icon: 'public/tenzies-icon.png',
+      icon: '/tenzies-icon.png',
       url: '/games/1',
       technologies: ['React']
     },
@@ -21,7 +21,7 @@ const App = () => {
       id: 2, 
       title: 'Assembly: Endgame', 
       description: 'A Classic word-guessing game. (not hangman)',
-      icon: '../images/assembly-icon.png',
+      icon: '/assembly-icon.png',
       url: '/games/assembly-endgame',
       technologies: ['React']
     },
@@ -29,7 +29,7 @@ const App = () => {
       id: 3, 
       title: 'Tic Tac Tow', 
       description: 'Under Development!',
-      icon: '/src/images/tic-tac-toe-icon.png', 
+      icon: '/tic-tac-toe-icon.png', 
       url: '/games/tic-tac-toe',
       technologies: ['Python']
     },
