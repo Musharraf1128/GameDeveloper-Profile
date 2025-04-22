@@ -13,7 +13,7 @@ const App = () => {
       id: 1, 
       title: 'Tenzies', 
       description: 'A quick dice-matching game.',
-      icon: '/src/images/tenzies-icon.png',
+      icon: './src/images/tenzies-icon.png',
       url: '/games/1',
       technologies: ['React']
     },
@@ -21,7 +21,7 @@ const App = () => {
       id: 2, 
       title: 'Assembly: Endgame', 
       description: 'A Classic word-guessing game. (not hangman)',
-      icon: '/src/images/assembly-icon.png',
+      icon: '../images/assembly-icon.png',
       url: '/games/assembly-endgame',
       technologies: ['React']
     },
