@@ -13,7 +13,7 @@ const App = () => {
       id: 1, 
       title: 'Tenzies', 
       description: 'A quick dice-matching game.',
-      icon: './src/images/tenzies-icon.png',
+      icon: 'public/tenzies-icon.png',
       url: '/games/1',
       technologies: ['React']
     },
